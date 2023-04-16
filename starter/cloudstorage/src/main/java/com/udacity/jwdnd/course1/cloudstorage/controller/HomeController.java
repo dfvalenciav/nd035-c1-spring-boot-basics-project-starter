@@ -41,9 +41,9 @@ public class HomeController {
                            Model model, Authentication authenticateAction) {
         String username = authenticateAction.getName();
         User user = this.userService.getUser(username);
-        Integer userId = user.getUserId();
+        Integer userId = user.getUserid();
 
-        model.addAttribute("userNote", this.noteService.displayAllNotes(userId));
+        model.addAttribute("userNotes", this.noteService.displayAllNotes(userId));
         model.addAttribute("unencryptedPasswordMap", this.credentialService.getUnencryptedPassword(userId));
         model.addAttribute("userCredentials", this.credentialService.displayAllCredentials(userId));
         model.addAttribute("files", this.fileStorageService.loadAllFiles(userId));
@@ -56,11 +56,11 @@ public class HomeController {
 
         String username = authenticateAction.getName();
         User user = this.userService.getUser(username);
-        Integer userId = user.getUserId();
-        note.setUserId(userId);
+        Integer userId = user.getUserid();
+        note.setUserid(userId);
 
         String taskError = null;
-        if (note.getNoteId() != null) {
+        if (note.getNoteid() == null) {
             try {
                 this.noteService.addNote(note, username);
             } catch (Exception e) {
@@ -129,22 +129,25 @@ public class HomeController {
         return "result";
     }
 
-    @GetMapping("/home/deletecredentil/{id}")
-    public String deleteCredential (@PathVariable ("id") Integer id , Credential credential, @ModelAttribute("noteObject") Note note,
-                                        Model model, Authentication authentication) {
-        String taskError = null;
+    @GetMapping("/home/deleteCredential/{id}")
+    public String deleteCredential(@PathVariable("id") Integer id, @ModelAttribute("credentialObject") Credential credential ,
+                                   @ModelAttribute("noteObject") Note note, Model model, Authentication authentication) {
 
+        String taskError = null;
         try {
             this.credentialService.deleteCredential(id);
-        } catch (Exception e) {
-            taskError = "Selected URL credential can not be deleted";
         }
+        catch (Exception e) {
+            taskError = "Error: Selected Url Credential cannot be deleted";
+        }
+
         if(taskError == null){
             model.addAttribute("successMessage", true);
             model.addAttribute("failureMessage", false);
         }else{
             model.addAttribute("failureMessage", taskError);
         }
+
         return "result";
     }
 
@@ -152,7 +155,7 @@ public class HomeController {
     public String handleFileUpload (@PathVariable ("fileUpload")MultipartFile fileUpload, Model model, Authentication authentication ) throws IOException {
         String username = authentication.getName();
         User user = this.userService.getUser(username);
-        Integer userId = user.getUserId();
+        Integer userId = user.getUserid();
 
         String taskError = null;
         if (fileUpload.isEmpty()){

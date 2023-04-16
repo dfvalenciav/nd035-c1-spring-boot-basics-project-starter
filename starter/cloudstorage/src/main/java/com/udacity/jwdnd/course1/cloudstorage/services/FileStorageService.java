@@ -3,11 +3,13 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.FileMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
 import com.udacity.jwdnd.course1.cloudstorage.model.UserFile;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
 
+@Service
 public class FileStorageService {
     private FileMapper fileMapper;
     private UserService userService;
@@ -22,7 +24,7 @@ public class FileStorageService {
      * */
     public  int storeFile (MultipartFile multipartFile, String username) throws IOException {
         User user = userService.getUser(username);
-        Integer userId = user.getUserId();
+        Integer userId = user.getUserid();
         return fileMapper.insertUserFile(new UserFile(null, multipartFile.getOriginalFilename(),multipartFile.getContentType(),
                 Long.toString(multipartFile.getSize()), userId.intValue(), multipartFile.getInputStream()));
     }

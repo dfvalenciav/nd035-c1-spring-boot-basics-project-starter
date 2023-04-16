@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
+@Mapper
 public interface NoteMapper {
     @Select("SELECT * FROM NOTES WHERE notetitle = #{notetitle}")
     Note getNote(String notetitle);

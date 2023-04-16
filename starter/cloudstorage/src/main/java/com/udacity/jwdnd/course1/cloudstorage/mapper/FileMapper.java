@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.*;
 import java.io.InputStream;
 import java.util.List;
 
+@Mapper
 public interface FileMapper {
 
     @Select("SELECT * FROM FILES WHERE fileId = #{fileId}")

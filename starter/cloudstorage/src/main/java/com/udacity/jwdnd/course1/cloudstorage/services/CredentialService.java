@@ -3,6 +3,7 @@ package com.udacity.jwdnd.course1.cloudstorage.services;
 import com.udacity.jwdnd.course1.cloudstorage.mapper.CredentialMapper;
 import com.udacity.jwdnd.course1.cloudstorage.model.Credential;
 import com.udacity.jwdnd.course1.cloudstorage.model.User;
+import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class CredentialService {
 
     private CredentialMapper credentialMapper;
@@ -24,7 +26,7 @@ public class CredentialService {
 
     public int addCredential (Credential credential, String username) {
         User user = this.userService.getUser(username);
-        Integer userid = user.getUserId();
+        Integer userid = user.getUserid();
         SecureRandom secureRandom = new SecureRandom();
         byte [] bytes = new byte[16];
         secureRandom.nextBytes(bytes);
@@ -36,7 +38,7 @@ public class CredentialService {
 
     public void updateCredential (Credential credential, String username){
         User user = this.userService.getUser(username);
-        Integer userid = user.getUserId();
+        Integer userid = user.getUserid();
         Integer credentialId = credential.getCredentialid();
         String credentialUrl = credential.getUrl();
         String credentialUsername = credential.getUsername();
@@ -48,7 +50,9 @@ public class CredentialService {
         this.credentialMapper.updateCredential(credentialId, credentialUrl, credentialUsername, encodedKey, encryptedPassword, userid.intValue());
     }
 
-    public void deleteCredential (Integer credentialId) {this.credentialMapper.deleteCredential(credentialId);}
+    public void deleteCredential(Integer credentialid){
+        this.credentialMapper.deleteCredential(credentialid);
+    }
 
     public List<Credential> displayAllCredentials(Integer userid){
         return credentialMapper.retrieveAllCredentials(userid);
